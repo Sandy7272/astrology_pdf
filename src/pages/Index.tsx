@@ -12,6 +12,7 @@ import DashaSection from '@/components/DashaSection';
 import SummarySection from '@/components/SummarySection';
 import RemediesSection from '@/components/RemediesSection';
 import Footer from '@/components/Footer';
+import PdfExportButton from '@/components/PdfExportButton';
 
 const Index = () => {
   // Sample user data - in a real app, this would come from user input or API
@@ -32,8 +33,11 @@ const Index = () => {
       <StarField />
       <ZodiacBackground />
       
+      {/* PDF Export Button */}
+      <PdfExportButton targetId="report-content" userName={userDetails.name} />
+      
       {/* Main Content */}
-      <main className="relative z-10">
+      <main id="report-content" className="relative z-10">
         <CoverPage userDetails={userDetails} />
         <PersonalitySection />
         <LifeJourneySection />
