@@ -19,7 +19,6 @@ import LanguageSelector, { Language } from '@/components/LanguageSelector';
 const Index = () => {
   const [language, setLanguage] = useState<Language>('en');
 
-  // Sample user data - in a real app, this would come from user input or API
   const userDetails = {
     name: 'Arjun Sharma',
     dob: 'March 15, 1992',
@@ -33,32 +32,25 @@ const Index = () => {
 
   return (
     <div className={`relative min-h-screen overflow-x-hidden ${language !== 'en' ? 'font-hindi' : ''}`}>
-      {/* Background Effects */}
       <StarField />
       <ZodiacBackground />
-      
-      {/* PDF Export Button */}
       <PdfExportButton targetId="report-content" userName={userDetails.name} />
-      
-      {/* Language Selector */}
       <LanguageSelector value={language} onChange={setLanguage} />
       
-      {/* Main Content */}
       <main id="report-content" className="relative z-10">
-        <CoverPage userDetails={userDetails} />
-        <PersonalitySection />
-        <LifeJourneySection />
-        <CareerSection />
-        <WealthSection />
-        <LoveSection />
-        <ForeignSection />
-        <HealthSection />
-        <DashaSection />
-        <SummarySection />
-        <RemediesSection />
+        <CoverPage userDetails={userDetails} language={language} />
+        <PersonalitySection language={language} />
+        <LifeJourneySection language={language} />
+        <CareerSection language={language} />
+        <WealthSection language={language} />
+        <LoveSection language={language} />
+        <ForeignSection language={language} />
+        <HealthSection language={language} />
+        <DashaSection language={language} />
+        <SummarySection language={language} />
+        <RemediesSection language={language} />
       </main>
       
-      {/* Footer */}
       <Footer />
     </div>
   );
