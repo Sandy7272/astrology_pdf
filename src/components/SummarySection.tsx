@@ -1,23 +1,28 @@
 import { motion } from 'framer-motion';
 import { CheckCircle, AlertTriangle, Star, Sparkles } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { translations, getTranslation } from '@/lib/translations';
 
-const SummarySection = () => {
-  const strengths = [
-    'Natural leadership with magnetic presence',
-    'Deep analytical thinking and wisdom',
-    'Resilience through adversity',
-    'Strong intuition and foresight',
-    'Loyal and dependable nature',
-  ];
+interface SummarySectionProps {
+  language: Language;
+}
 
+const SummarySection = ({ language }: SummarySectionProps) => {
+  const t = translations.summary;
   const bestYears = ['2027', '2031', '2035', '2038', '2042'];
   const warningYears = ['2026', '2033', '2039'];
+
+  const parseGoldText = (text: string) => {
+    const parts = text.split(/<gold>|<\/gold>/);
+    return parts.map((part, i) => 
+      i % 2 === 1 ? <span key={i} className="text-gold-shimmer font-semibold">{part}</span> : part
+    );
+  };
 
   return (
     <section className="min-h-screen py-20 px-6 relative">
       <div className="max-w-5xl mx-auto">
-        {/* Section Header */}
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -26,13 +31,12 @@ const SummarySection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Grand Finale
+            {getTranslation(t.sceneLabel, language)}
           </span>
-          <h2 className="section-title mb-6">Your Destiny Summary</h2>
+          <h2 className="section-title mb-6">{getTranslation(t.title, language)}</h2>
           <GoldDivider />
         </motion.div>
 
-        {/* Climax Statement */}
         <motion.div
           className="card-cosmic rounded-2xl p-8 md:p-12 mb-12 border-glow text-center relative overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
@@ -40,19 +44,10 @@ const SummarySection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          {/* Decorative elements */}
-          <motion.div
-            className="absolute top-4 left-8"
-            animate={{ rotate: [0, 360] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          >
+          <motion.div className="absolute top-4 left-8" animate={{ rotate: [0, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }}>
             <Sparkles className="w-8 h-8 text-primary/30" />
           </motion.div>
-          <motion.div
-            className="absolute bottom-4 right-8"
-            animate={{ rotate: [360, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          >
+          <motion.div className="absolute bottom-4 right-8" animate={{ rotate: [360, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }}>
             <Star className="w-6 h-6 text-primary/30" />
           </motion.div>
 
@@ -63,15 +58,11 @@ const SummarySection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 1 }}
           >
-            "Your life reveals a story of <span className="text-gold-shimmer font-semibold">late but spectacular success</span>. 
-            The struggles of early years transform into <span className="text-gold-shimmer font-semibold">unshakeable stability</span>. 
-            You are destined not just to succeed, but to <span className="text-gold-shimmer font-semibold">inspire generations</span>..."
+            "{parseGoldText(getTranslation(t.climax, language))}"
           </motion.p>
         </motion.div>
 
-        {/* Summary Grid */}
         <div className="grid md:grid-cols-3 gap-6">
-          {/* Strengths */}
           <motion.div
             className="card-cosmic rounded-2xl p-6 md:col-span-2"
             initial={{ opacity: 0, x: -30 }}
@@ -80,16 +71,14 @@ const SummarySection = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="zodiac-icon">
-                <CheckCircle className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h3 className="font-display text-xl text-gold-shimmer">Core Strengths</h3>
+              <div className="zodiac-icon"><CheckCircle className="w-6 h-6 text-emerald-400" /></div>
+              <h3 className="font-display text-xl text-gold-shimmer">{getTranslation(t.coreStrengths, language)}</h3>
             </div>
             
             <div className="space-y-3">
-              {strengths.map((strength, index) => (
+              {t.strengths.map((strength, index) => (
                 <motion.div
-                  key={strength}
+                  key={index}
                   className="flex items-center gap-3 p-3 rounded-lg bg-emerald-500/10"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -97,65 +86,36 @@ const SummarySection = () => {
                   transition={{ delay: 0.3 + index * 0.1 }}
                 >
                   <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
-                  <span className="font-elegant text-foreground/80">{strength}</span>
+                  <span className="font-elegant text-foreground/80">{getTranslation(strength, language)}</span>
                 </motion.div>
               ))}
             </div>
           </motion.div>
 
-          {/* Years Overview */}
           <div className="space-y-6">
-            {/* Best Years */}
-            <motion.div
-              className="card-cosmic rounded-2xl p-6"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+            <motion.div className="card-cosmic rounded-2xl p-6" initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
               <div className="flex items-center gap-3 mb-4">
                 <Star className="w-5 h-5 text-primary" fill="currentColor" />
-                <h3 className="font-display text-lg text-gold-shimmer">Golden Years</h3>
+                <h3 className="font-display text-lg text-gold-shimmer">{getTranslation(t.goldenYears, language)}</h3>
               </div>
-              
               <div className="flex flex-wrap gap-2">
                 {bestYears.map((year) => (
-                  <span
-                    key={year}
-                    className="px-3 py-1.5 rounded-full text-sm font-body bg-primary/20 text-primary border border-primary/30"
-                  >
-                    {year}
-                  </span>
+                  <span key={year} className="px-3 py-1.5 rounded-full text-sm font-body bg-primary/20 text-primary border border-primary/30">{year}</span>
                 ))}
               </div>
             </motion.div>
 
-            {/* Warning Years */}
-            <motion.div
-              className="card-cosmic rounded-2xl p-6"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-            >
+            <motion.div className="card-cosmic rounded-2xl p-6" initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.15 }}>
               <div className="flex items-center gap-3 mb-4">
                 <AlertTriangle className="w-5 h-5 text-amber-500" />
-                <h3 className="font-display text-lg text-amber-400">Careful Years</h3>
+                <h3 className="font-display text-lg text-amber-400">{getTranslation(t.carefulYears, language)}</h3>
               </div>
-              
               <div className="flex flex-wrap gap-2">
                 {warningYears.map((year) => (
-                  <span
-                    key={year}
-                    className="px-3 py-1.5 rounded-full text-sm font-body bg-amber-500/10 text-amber-400 border border-amber-500/30"
-                  >
-                    {year}
-                  </span>
+                  <span key={year} className="px-3 py-1.5 rounded-full text-sm font-body bg-amber-500/10 text-amber-400 border border-amber-500/30">{year}</span>
                 ))}
               </div>
-              <p className="font-body text-xs text-muted-foreground mt-3">
-                Extra caution advised during these periods
-              </p>
+              <p className="font-body text-xs text-muted-foreground mt-3">{getTranslation(t.cautionNote, language)}</p>
             </motion.div>
           </div>
         </div>
