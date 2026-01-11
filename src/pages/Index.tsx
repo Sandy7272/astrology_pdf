@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import StarField from '@/components/StarField';
 import ZodiacBackground from '@/components/ZodiacBackground';
 import CoverPage from '@/components/CoverPage';
@@ -13,8 +14,11 @@ import SummarySection from '@/components/SummarySection';
 import RemediesSection from '@/components/RemediesSection';
 import Footer from '@/components/Footer';
 import PdfExportButton from '@/components/PdfExportButton';
+import LanguageSelector, { Language } from '@/components/LanguageSelector';
 
 const Index = () => {
+  const [language, setLanguage] = useState<Language>('en');
+
   // Sample user data - in a real app, this would come from user input or API
   const userDetails = {
     name: 'Arjun Sharma',
@@ -28,13 +32,16 @@ const Index = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div className={`relative min-h-screen overflow-x-hidden ${language !== 'en' ? 'font-hindi' : ''}`}>
       {/* Background Effects */}
       <StarField />
       <ZodiacBackground />
       
       {/* PDF Export Button */}
       <PdfExportButton targetId="report-content" userName={userDetails.name} />
+      
+      {/* Language Selector */}
+      <LanguageSelector value={language} onChange={setLanguage} />
       
       {/* Main Content */}
       <main id="report-content" className="relative z-10">
@@ -52,7 +59,7 @@ const Index = () => {
       </main>
       
       {/* Footer */}
-      <Footer brandName="Cosmic Destiny" />
+      <Footer />
     </div>
   );
 };

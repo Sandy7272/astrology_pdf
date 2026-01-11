@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion';
 
 interface FooterProps {
-  brandName?: string;
   pageNumber?: number;
   totalPages?: number;
 }
 
-const Footer = ({ brandName = 'Cosmic Destiny', pageNumber, totalPages }: FooterProps) => {
+const Footer = ({ pageNumber, totalPages }: FooterProps) => {
   return (
     <motion.footer
       className="fixed bottom-0 left-0 right-0 z-50"
@@ -19,7 +18,7 @@ const Footer = ({ brandName = 'Cosmic Destiny', pageNumber, totalPages }: Footer
           {/* Brand */}
           <div className="flex items-center gap-2">
             <span className="text-primary text-lg">✧</span>
-            <span className="font-display text-sm text-gold-shimmer">{brandName}</span>
+            <span className="font-display text-sm text-gold-shimmer font-semibold">BoloAstro.com</span>
           </div>
 
           {/* Watermark */}
