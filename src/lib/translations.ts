@@ -405,31 +405,39 @@ export const getTranslationValue = <T>(obj: { en: T; hi: T; mr: T }, lang: Langu
   return obj[lang];
 };
 
+// Helper to check if an object is a translation leaf (has en/hi/mr with primitive or array values)
+const isTranslationLeaf = (obj: any): boolean => {
+  if (typeof obj !== 'object' || obj === null) return false;
+  const keys = Object.keys(obj);
+  // Must have exactly en, hi, mr keys (or be a superset check)
+  if (!('en' in obj) || !('hi' in obj) || !('mr' in obj)) return false;
+  // The values should be primitives or arrays of primitives, not nested objects
+  const enValue = obj.en;
+  return typeof enValue === 'string' || typeof enValue === 'number' || typeof enValue === 'boolean' || 
+         (Array.isArray(enValue) && (enValue.length === 0 || typeof enValue[0] !== 'object' || enValue[0] === null || !('en' in enValue[0])));
+};
+
 // Helper to get all translations for a language - recursively extracts values
 const extractLangValues = (obj: any, lang: Language): any => {
   if (obj === null || obj === undefined) return obj;
-  
-  // If it's a translation object with language keys
-  if (typeof obj === 'object' && 'en' in obj && 'hi' in obj && 'mr' in obj && 
-      (typeof obj.en === 'string' || Array.isArray(obj.en))) {
-    return obj[lang];
-  }
+  if (typeof obj !== 'object') return obj;
   
   // If it's an array, map over it
   if (Array.isArray(obj)) {
     return obj.map(item => extractLangValues(item, lang));
   }
   
-  // If it's an object, recurse
-  if (typeof obj === 'object') {
-    const result: any = {};
-    for (const key in obj) {
-      result[key] = extractLangValues(obj[key], lang);
-    }
-    return result;
+  // If it's a translation leaf object with language keys, extract the value
+  if (isTranslationLeaf(obj)) {
+    return obj[lang];
   }
   
-  return obj;
+  // Otherwise, recurse into each property
+  const result: any = {};
+  for (const key in obj) {
+    result[key] = extractLangValues(obj[key], lang);
+  }
+  return result;
 };
 
 export const getTranslation = (lang: Language) => {
