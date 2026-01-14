@@ -2,6 +2,9 @@ import { motion, Variants } from 'framer-motion';
 import { Star, Crown, Sparkles } from 'lucide-react';
 import { Language } from './LanguageSelector';
 import { getTranslation } from '@/lib/translations';
+import { D1ChartData, PanchangData, RASHI_NAMES } from '@/types/astrology';
+import NorthIndianChart from './NorthIndianChart';
+import GoldDivider from './GoldDivider';
 
 interface UserDetails {
   name: string;
@@ -17,10 +20,19 @@ interface UserDetails {
 interface CoverPageProps {
   userDetails: UserDetails;
   language: Language;
+  chartData?: D1ChartData;
+  panchang?: PanchangData;
 }
 
-const CoverPage = ({ userDetails, language }: CoverPageProps) => {
+const CoverPage = ({ userDetails, language, chartData, panchang }: CoverPageProps) => {
   const t = getTranslation(language);
+  
+  const getAscendantName = () => {
+    const ascNum = parseInt(userDetails.ascendant);
+    if (isNaN(ascNum)) return userDetails.ascendant;
+    const rashi = RASHI_NAMES[ascNum];
+    return rashi ? (language === 'en' ? rashi.en : rashi[language] || rashi.hi) : userDetails.ascendant;
+  };
   
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -43,7 +55,7 @@ const CoverPage = ({ userDetails, language }: CoverPageProps) => {
   ];
 
   const astroCards = [
-    { label: t.cover.ascendant, value: userDetails.ascendant, symbol: '♈' },
+    { label: t.cover.ascendant, value: getAscendantName(), symbol: '♈' },
     { label: t.cover.moonSign, value: userDetails.moonSign, symbol: '☽' },
     { label: t.cover.nakshatra, value: userDetails.nakshatra, symbol: '⭐' },
   ];
@@ -62,7 +74,7 @@ const CoverPage = ({ userDetails, language }: CoverPageProps) => {
         </div>
       </motion.div>
 
-      <motion.div className="text-center mb-12" variants={itemVariants}>
+      <motion.div className="text-center mb-10" variants={itemVariants}>
         <motion.div 
           className="flex justify-center mb-6"
           animate={{ scale: [1, 1.05, 1] }}
@@ -74,76 +86,160 @@ const CoverPage = ({ userDetails, language }: CoverPageProps) => {
           </div>
         </motion.div>
         
-        <h1 className="font-display text-6xl md:text-8xl font-bold tracking-wider mb-4">
-          <span className="text-gold-shimmer">{t.cover.title1}</span>
+        <h1 className="font-display text-5xl md:text-7xl font-bold tracking-wider mb-4">
+          <span className="text-gold-shimmer">
+            {language === 'en' ? 'Bhagya' : language === 'hi' ? 'भाग्य' : 'भाग्य'}
+          </span>
         </h1>
-        <h1 className="font-display text-5xl md:text-7xl font-bold tracking-wider mb-6">
-          <span className="text-gold-shimmer">{t.cover.title2}</span>
+        <h1 className="font-display text-4xl md:text-6xl font-bold tracking-wider mb-6">
+          <span className="text-gold-shimmer">
+            {language === 'en' ? 'Unveiled' : language === 'hi' ? 'उद्घाटन' : 'उद्घाटन'}
+          </span>
         </h1>
         
-        <motion.p className="font-elegant text-2xl md:text-3xl text-foreground/80 italic" variants={itemVariants}>
-          {t.cover.subtitle}
+        <motion.p className="font-elegant text-xl md:text-2xl text-foreground/80 italic" variants={itemVariants}>
+          {language === 'en' 
+            ? 'Your Vedic Jyotish Report' 
+            : language === 'hi' 
+              ? 'आपकी वैदिक ज्योतिष रिपोर्ट'
+              : 'तुमचा वैदिक ज्योतिष अहवाल'}
         </motion.p>
         
-        <motion.p className="font-body text-muted-foreground mt-4 text-lg" variants={itemVariants}>
-          {t.cover.basedOn}
+        <motion.p className="font-body text-muted-foreground mt-3 text-base" variants={itemVariants}>
+          {language === 'en' 
+            ? 'Based on Lahiri Ayanamsa • Vedic Astrology' 
+            : language === 'hi'
+              ? 'लहिरी अयनांश के आधार पर • वैदिक ज्योतिष'
+              : 'लाहिरी अयनांशावर आधारित • वैदिक ज्योतिष'}
         </motion.p>
       </motion.div>
 
-      <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl w-full mb-12" variants={itemVariants}>
+      {/* User Details Cards */}
+      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl w-full mb-8" variants={itemVariants}>
         {userCards.map((item) => (
           <motion.div
             key={item.label}
-            className="card-cosmic rounded-xl p-5 text-center"
+            className="card-cosmic rounded-xl p-4 text-center"
             whileHover={{ scale: 1.02, borderColor: 'hsl(43 74% 49% / 0.5)' }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <span className="text-2xl mb-2 block">{item.icon}</span>
-            <p className="text-muted-foreground text-sm mb-1">{item.label}</p>
-            <p className="font-elegant text-lg text-foreground">{item.value}</p>
+            <span className="text-xl mb-1 block">{item.icon}</span>
+            <p className="text-muted-foreground text-xs mb-1">{item.label}</p>
+            <p className="font-elegant text-sm text-foreground">{item.value}</p>
           </motion.div>
         ))}
       </motion.div>
 
-      <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl w-full mb-12" variants={itemVariants}>
+      {/* Kundali Chart - The Heart of the Report */}
+      {chartData && (
+        <motion.div 
+          className="w-full max-w-md mb-8"
+          variants={itemVariants}
+        >
+          <h2 className="text-center font-display text-xl text-gold-soft mb-4">
+            {language === 'en' ? 'Lagna Kundali' : language === 'hi' ? 'लग्न कुंडली' : 'लग्न कुंडली'}
+          </h2>
+          <NorthIndianChart 
+            chartData={chartData} 
+            language={language}
+            size={340}
+          />
+        </motion.div>
+      )}
+
+      {/* Astrological Details */}
+      <motion.div className="grid grid-cols-3 gap-3 max-w-2xl w-full mb-8" variants={itemVariants}>
         {astroCards.map((item) => (
-          <motion.div key={item.label} className="card-cosmic border-glow rounded-xl p-6 text-center" whileHover={{ y: -5 }}>
-            <div className="zodiac-icon mx-auto mb-3">
-              <span className="text-2xl text-primary">{item.symbol}</span>
+          <motion.div key={item.label} className="card-cosmic border-glow rounded-xl p-4 text-center" whileHover={{ y: -5 }}>
+            <div className="zodiac-icon mx-auto mb-2">
+              <span className="text-xl text-primary">{item.symbol}</span>
             </div>
-            <p className="text-muted-foreground text-sm mb-1">{item.label}</p>
-            <p className="font-display text-xl text-gold-shimmer">{item.value}</p>
+            <p className="text-muted-foreground text-xs mb-1">{item.label}</p>
+            <p className="font-display text-base text-gold-shimmer">{item.value}</p>
           </motion.div>
         ))}
       </motion.div>
 
+      {/* Birth Panchang Table */}
+      {panchang && (
+        <motion.div className="w-full max-w-3xl mb-8" variants={itemVariants}>
+          <h3 className="text-center font-display text-lg text-gold-soft mb-4">
+            {language === 'en' ? 'Birth Panchang' : language === 'hi' ? 'जन्म पंचांग' : 'जन्म पंचांग'}
+          </h3>
+          <div className="card-cosmic rounded-xl p-4 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-primary/20">
+                  <th className="text-gold-soft font-display py-2 px-3 text-left">
+                    {language === 'en' ? 'Tithi' : 'तिथि'}
+                  </th>
+                  <th className="text-gold-soft font-display py-2 px-3 text-left">
+                    {language === 'en' ? 'Nakshatra' : 'नक्षत्र'}
+                  </th>
+                  <th className="text-gold-soft font-display py-2 px-3 text-left">
+                    {language === 'en' ? 'Yoga' : 'योग'}
+                  </th>
+                  <th className="text-gold-soft font-display py-2 px-3 text-left">
+                    {language === 'en' ? 'Karana' : 'करण'}
+                  </th>
+                  <th className="text-gold-soft font-display py-2 px-3 text-left">
+                    {language === 'en' ? 'Sunrise' : 'सूर्योदय'}
+                  </th>
+                  <th className="text-gold-soft font-display py-2 px-3 text-left">
+                    {language === 'en' ? 'Sunset' : 'सूर्यास्त'}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="py-2 px-3 text-foreground/90">{panchang.tithi}</td>
+                  <td className="py-2 px-3 text-foreground/90">
+                    {panchang.nakshatra} <span className="text-primary text-xs">({language === 'en' ? 'Pada' : 'पाद'} {panchang.nakshatraPada})</span>
+                  </td>
+                  <td className="py-2 px-3 text-foreground/90">{panchang.yoga}</td>
+                  <td className="py-2 px-3 text-foreground/90">{panchang.karana}</td>
+                  <td className="py-2 px-3 text-foreground/90">{panchang.sunrise}</td>
+                  <td className="py-2 px-3 text-foreground/90">{panchang.sunset}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Confidence Score */}
       <motion.div className="text-center" variants={itemVariants}>
-        <div className="inline-flex items-center gap-3 card-cosmic rounded-full px-8 py-4 border-glow">
+        <div className="inline-flex items-center gap-3 card-cosmic rounded-full px-6 py-3 border-glow">
           <div className="flex gap-1">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-5 h-5 ${i < Math.round(userDetails.confidenceScore / 20) ? 'text-primary fill-primary' : 'text-muted'}`} />
+              <Star key={i} className={`w-4 h-4 ${i < Math.round(userDetails.confidenceScore / 20) ? 'text-primary fill-primary' : 'text-muted'}`} />
             ))}
           </div>
-          <span className="font-display text-lg">
+          <span className="font-display text-base">
             <span className="text-gold-shimmer">{userDetails.confidenceScore}%</span>
-            <span className="text-muted-foreground ml-2">{t.cover.confidenceScore}</span>
+            <span className="text-muted-foreground ml-2">
+              {language === 'en' ? 'Accuracy Score' : language === 'hi' ? 'सटीकता स्कोर' : 'अचूकता स्कोअर'}
+            </span>
           </span>
         </div>
       </motion.div>
 
+      {/* Scroll indicator */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <div className="w-6 h-10 rounded-full border-2 border-primary/40 flex justify-center pt-2">
+        <div className="w-5 h-8 rounded-full border-2 border-primary/40 flex justify-center pt-1.5">
           <motion.div 
-            className="w-1.5 h-3 rounded-full bg-primary"
-            animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
+            className="w-1 h-2 rounded-full bg-primary"
+            animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
         </div>
       </motion.div>
+
+      <GoldDivider />
     </motion.section>
   );
 };
