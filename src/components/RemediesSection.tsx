@@ -1,48 +1,40 @@
 import { motion } from 'framer-motion';
 import { Gem, Heart, Flame, BookOpen } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const RemediesSection = () => {
+interface RemediesSectionProps {
+  language: Language;
+}
+
+const RemediesSection = ({ language }: RemediesSectionProps) => {
+  const t = getTranslation(language);
+  
   const remedies = [
     {
       icon: '🕉️',
-      category: 'Mantras',
-      title: 'Sacred Chants',
-      items: [
-        'Om Namah Shivaya - 108 times daily',
-        'Gayatri Mantra at sunrise',
-        'Hanuman Chalisa on Tuesdays',
-      ],
+      category: t.remedies.categories.mantras.category,
+      title: t.remedies.categories.mantras.title,
+      items: t.remedies.categories.mantras.items,
     },
     {
       icon: '💎',
-      category: 'Gemstones',
-      title: 'Power Stones',
-      items: [
-        'Yellow Sapphire (Pukhraj) - 5+ carats',
-        'Pearl (Moti) for emotional balance',
-        'Wear on right index finger',
-      ],
+      category: t.remedies.categories.gemstones.category,
+      title: t.remedies.categories.gemstones.title,
+      items: t.remedies.categories.gemstones.items,
     },
     {
       icon: '🙏',
-      category: 'Donations',
-      title: 'Acts of Grace',
-      items: [
-        'Feed cows on Thursdays',
-        'Donate yellow items to temples',
-        'Support education for underprivileged',
-      ],
+      category: t.remedies.categories.donations.category,
+      title: t.remedies.categories.donations.title,
+      items: t.remedies.categories.donations.items,
     },
     {
       icon: '🔥',
-      category: 'Rituals',
-      title: 'Sacred Practices',
-      items: [
-        'Light ghee lamp every evening',
-        'Visit Vishnu temple on Thursdays',
-        'Perform Rudrabhishek annually',
-      ],
+      category: t.remedies.categories.rituals.category,
+      title: t.remedies.categories.rituals.title,
+      items: t.remedies.categories.rituals.items,
     },
   ];
 
@@ -61,9 +53,9 @@ const RemediesSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Credits Scene
+            {t.remedies.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Powerful Remedies</h2>
+          <h2 className="section-title mb-6">{t.remedies.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -78,9 +70,7 @@ const RemediesSection = () => {
           <motion.p 
             className="font-elegant text-xl md:text-2xl text-foreground/90 italic leading-relaxed"
           >
-            "These cosmic prescriptions are designed to <span className="text-gold-shimmer">harmonize your energies</span>, 
-            strengthen benefic planets, and <span className="text-gold-shimmer">neutralize malefic influences</span> 
-            in your birth chart..."
+            "{t.remedies.intro}"
           </motion.p>
         </motion.div>
 
@@ -141,8 +131,7 @@ const RemediesSection = () => {
           transition={{ delay: 0.5 }}
         >
           <p className="font-elegant text-foreground/70 italic">
-            ✨ Perform these remedies with faith and devotion for maximum benefits. 
-            Consult a qualified astrologer before wearing gemstones.
+            ✨ {t.remedies.note}
           </p>
         </motion.div>
       </div>

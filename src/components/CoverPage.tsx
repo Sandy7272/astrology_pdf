@@ -1,7 +1,7 @@
 import { motion, Variants } from 'framer-motion';
 import { Star, Crown, Sparkles } from 'lucide-react';
 import { Language } from './LanguageSelector';
-import { translations, getTranslation } from '@/lib/translations';
+import { getTranslation } from '@/lib/translations';
 
 interface UserDetails {
   name: string;
@@ -20,7 +20,7 @@ interface CoverPageProps {
 }
 
 const CoverPage = ({ userDetails, language }: CoverPageProps) => {
-  const t = translations.cover;
+  const t = getTranslation(language);
   
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -36,16 +36,16 @@ const CoverPage = ({ userDetails, language }: CoverPageProps) => {
   };
 
   const userCards = [
-    { label: getTranslation(t.name, language), value: userDetails.name, icon: '👤' },
-    { label: getTranslation(t.dob, language), value: userDetails.dob, icon: '📅' },
-    { label: getTranslation(t.time, language), value: userDetails.time, icon: '🕐' },
-    { label: getTranslation(t.place, language), value: userDetails.place, icon: '📍' },
+    { label: t.cover.name, value: userDetails.name, icon: '👤' },
+    { label: t.cover.dob, value: userDetails.dob, icon: '📅' },
+    { label: t.cover.time, value: userDetails.time, icon: '🕐' },
+    { label: t.cover.place, value: userDetails.place, icon: '📍' },
   ];
 
   const astroCards = [
-    { label: getTranslation(t.ascendant, language), value: userDetails.ascendant, symbol: '♈' },
-    { label: getTranslation(t.moonSign, language), value: userDetails.moonSign, symbol: '☽' },
-    { label: getTranslation(t.nakshatra, language), value: userDetails.nakshatra, symbol: '⭐' },
+    { label: t.cover.ascendant, value: userDetails.ascendant, symbol: '♈' },
+    { label: t.cover.moonSign, value: userDetails.moonSign, symbol: '☽' },
+    { label: t.cover.nakshatra, value: userDetails.nakshatra, symbol: '⭐' },
   ];
 
   return (
@@ -58,7 +58,7 @@ const CoverPage = ({ userDetails, language }: CoverPageProps) => {
       <motion.div className="absolute top-8 right-8" variants={itemVariants}>
         <div className="badge-premium flex items-center gap-2">
           <Crown className="w-4 h-4" />
-          <span>{getTranslation(t.vipBadge, language)}</span>
+          <span>{t.cover.vipBadge}</span>
         </div>
       </motion.div>
 
@@ -75,18 +75,18 @@ const CoverPage = ({ userDetails, language }: CoverPageProps) => {
         </motion.div>
         
         <h1 className="font-display text-6xl md:text-8xl font-bold tracking-wider mb-4">
-          <span className="text-gold-shimmer">{getTranslation(t.title1, language)}</span>
+          <span className="text-gold-shimmer">{t.cover.title1}</span>
         </h1>
         <h1 className="font-display text-5xl md:text-7xl font-bold tracking-wider mb-6">
-          <span className="text-gold-shimmer">{getTranslation(t.title2, language)}</span>
+          <span className="text-gold-shimmer">{t.cover.title2}</span>
         </h1>
         
         <motion.p className="font-elegant text-2xl md:text-3xl text-foreground/80 italic" variants={itemVariants}>
-          {getTranslation(t.subtitle, language)}
+          {t.cover.subtitle}
         </motion.p>
         
         <motion.p className="font-body text-muted-foreground mt-4 text-lg" variants={itemVariants}>
-          {getTranslation(t.basedOn, language)}
+          {t.cover.basedOn}
         </motion.p>
       </motion.div>
 
@@ -126,7 +126,7 @@ const CoverPage = ({ userDetails, language }: CoverPageProps) => {
           </div>
           <span className="font-display text-lg">
             <span className="text-gold-shimmer">{userDetails.confidenceScore}%</span>
-            <span className="text-muted-foreground ml-2">{getTranslation(t.confidenceScore, language)}</span>
+            <span className="text-muted-foreground ml-2">{t.cover.confidenceScore}</span>
           </span>
         </div>
       </motion.div>

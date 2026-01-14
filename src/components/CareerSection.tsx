@@ -1,36 +1,44 @@
 import { motion } from 'framer-motion';
 import { TrendingUp, Briefcase, Building, Award } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const CareerSection = () => {
+interface CareerSectionProps {
+  language: Language;
+}
+
+const CareerSection = ({ language }: CareerSectionProps) => {
+  const t = getTranslation(language);
+  
   const careerMilestones = [
-    { age: 25, label: 'First Major Role', y: 20 },
-    { age: 30, label: 'Leadership Position', y: 40 },
-    { age: 35, label: 'Peak Growth', y: 65 },
-    { age: 40, label: 'Recognition Era', y: 80 },
-    { age: 45, label: 'Mastery Achieved', y: 90 },
+    { age: 25, label: t.career.milestones.firstRole, y: 20 },
+    { age: 30, label: t.career.milestones.leadership, y: 40 },
+    { age: 35, label: t.career.milestones.peakGrowth, y: 65 },
+    { age: 40, label: t.career.milestones.recognition, y: 80 },
+    { age: 45, label: t.career.milestones.mastery, y: 90 },
   ];
 
   const careerInsights = [
     {
       icon: Briefcase,
-      title: 'Career Nature',
-      content: 'Your chart reveals a natural affinity for leadership roles in creative or analytical fields. You thrive where strategy meets innovation.',
+      title: t.career.insights.careerNature.title,
+      content: t.career.insights.careerNature.content,
     },
     {
       icon: TrendingUp,
-      title: 'Growth Timeline',
-      content: 'Ages 33-42 mark your golden professional decade. Patience before this period builds the foundation for extraordinary success.',
+      title: t.career.insights.growthTimeline.title,
+      content: t.career.insights.growthTimeline.content,
     },
     {
       icon: Building,
-      title: 'Business vs Job',
-      content: 'Your entrepreneurial spirit is strong, but partnership ventures after 35 yield better results than solo endeavors in early years.',
+      title: t.career.insights.businessVsJob.title,
+      content: t.career.insights.businessVsJob.content,
     },
     {
       icon: Award,
-      title: 'Peak Years',
-      content: '2027, 2031, and 2035 shine brightest in your professional sky. Major promotions, recognition, or business expansion likely.',
+      title: t.career.insights.peakYears.title,
+      content: t.career.insights.peakYears.content,
     },
   ];
 
@@ -46,9 +54,9 @@ const CareerSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Success Arc
+            {t.career.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Rise of Your Career</h2>
+          <h2 className="section-title mb-6">{t.career.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -61,7 +69,7 @@ const CareerSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h3 className="font-display text-xl text-gold-shimmer mb-8 text-center">
-            Career Growth Trajectory
+            {t.career.growthTitle}
           </h3>
           
           {/* Graph */}

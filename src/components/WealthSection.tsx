@@ -1,36 +1,44 @@
 import { motion } from 'framer-motion';
 import { Coins, TrendingUp, Home, Landmark } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const WealthSection = () => {
+interface WealthSectionProps {
+  language: Language;
+}
+
+const WealthSection = ({ language }: WealthSectionProps) => {
+  const t = getTranslation(language);
+  
   const wealthPhases = [
-    { age: '20-28', status: 'building', label: 'Foundation Phase', income: 30 },
-    { age: '29-35', status: 'growth', label: 'Accumulation', income: 55 },
-    { age: '36-45', status: 'peak', label: 'Wealth Peak', income: 85 },
-    { age: '46-55', status: 'stability', label: 'Stability', income: 90 },
-    { age: '56+', status: 'legacy', label: 'Legacy', income: 80 },
+    { age: '20-28', status: 'building', label: t.wealth.phases.foundation, income: 30 },
+    { age: '29-35', status: 'growth', label: t.wealth.phases.accumulation, income: 55 },
+    { age: '36-45', status: 'peak', label: t.wealth.phases.wealthPeak, income: 85 },
+    { age: '46-55', status: 'stability', label: t.wealth.phases.stability, income: 90 },
+    { age: '56+', status: 'legacy', label: t.wealth.phases.legacy, income: 80 },
   ];
 
   const insights = [
     {
       icon: Coins,
-      title: 'Wealth Nature',
-      content: 'Your chart indicates wealth through intellect and strategic investments rather than inheritance. Self-made prosperity is your destiny.',
+      title: t.wealth.insights.wealthNature.title,
+      content: t.wealth.insights.wealthNature.content,
     },
     {
       icon: Home,
-      title: 'Property Yoga',
-      content: 'Strong planetary combinations for real estate. Property investments after age 32 yield exceptional returns. Multiple properties indicated.',
+      title: t.wealth.insights.propertyYoga.title,
+      content: t.wealth.insights.propertyYoga.content,
     },
     {
       icon: Landmark,
-      title: 'Investment Style',
-      content: 'Long-term investments suit you best. Avoid speculation. Gold, land, and blue-chip stocks align with your planetary energies.',
+      title: t.wealth.insights.investmentStyle.title,
+      content: t.wealth.insights.investmentStyle.content,
     },
     {
       icon: TrendingUp,
-      title: 'Peak Wealth Years',
-      content: '2030-2038 marks your golden financial decade. Major acquisitions and wealth multiplication during this period.',
+      title: t.wealth.insights.peakWealthYears.title,
+      content: t.wealth.insights.peakWealthYears.content,
     },
   ];
 
@@ -49,9 +57,9 @@ const WealthSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Wealth Journey
+            {t.wealth.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Path of Prosperity</h2>
+          <h2 className="section-title mb-6">{t.wealth.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -64,7 +72,7 @@ const WealthSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h3 className="font-display text-xl text-gold-shimmer mb-8 text-center">
-            Financial Growth Timeline
+            {t.wealth.timelineTitle}
           </h3>
           
           {/* Bar Graph */}

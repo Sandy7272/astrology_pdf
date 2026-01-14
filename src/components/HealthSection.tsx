@@ -1,41 +1,44 @@
 import { motion } from 'framer-motion';
 import { Heart, Brain, Activity, Flower2 } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const HealthSection = () => {
+interface HealthSectionProps {
+  language: Language;
+}
+
+const HealthSection = ({ language }: HealthSectionProps) => {
+  const t = getTranslation(language);
+  
   const healthAreas = [
     {
       icon: Brain,
-      area: 'Mental Wellness',
+      area: t.health.areas.mentalWellness.area,
       strength: 85,
-      advice: 'Strong mental resilience. Practice meditation during stressful planetary transits. Avoid overthinking in Saturn periods.',
+      advice: t.health.areas.mentalWellness.advice,
     },
     {
       icon: Heart,
-      area: 'Heart & Vitals',
+      area: t.health.areas.heartVitals.area,
       strength: 78,
-      advice: 'Generally robust cardiovascular health. Extra care needed during Mars transits. Regular exercise benefits greatly.',
+      advice: t.health.areas.heartVitals.advice,
     },
     {
       icon: Activity,
-      area: 'Energy Levels',
+      area: t.health.areas.energyLevels.area,
       strength: 82,
-      advice: 'Natural vitality from Sun placement. Energy peaks in morning hours. Maintain consistent sleep schedule.',
+      advice: t.health.areas.energyLevels.advice,
     },
     {
       icon: Flower2,
-      area: 'Emotional Balance',
+      area: t.health.areas.emotionalBalance.area,
       strength: 75,
-      advice: 'Moon influences emotional fluctuations. Water-based activities bring calm. Practice gratitude daily.',
+      advice: t.health.areas.emotionalBalance.advice,
     },
   ];
 
-  const remedies = [
-    { icon: '🧘', text: 'Morning meditation for 15 minutes' },
-    { icon: '🌊', text: 'Drink water from copper vessel' },
-    { icon: '🌿', text: 'Include green vegetables daily' },
-    { icon: '🌅', text: 'Sun gazing at sunrise (briefly)' },
-  ];
+  const ritualIcons = ['🧘', '🌊', '🌿', '🌅'];
 
   return (
     <section className="min-h-screen py-20 px-6 relative">
@@ -52,9 +55,9 @@ const HealthSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Wellness Scene
+            {t.health.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Mind & Body</h2>
+          <h2 className="section-title mb-6">{t.health.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -89,7 +92,7 @@ const HealthSection = () => {
                     />
                   </div>
                   <div className="flex justify-between text-xs text-muted-foreground mb-3">
-                    <span>Cosmic Strength</span>
+                    <span>{t.health.cosmicStrength}</span>
                     <span className="text-emerald-400">{area.strength}%</span>
                   </div>
                   
@@ -111,11 +114,11 @@ const HealthSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h3 className="font-display text-xl text-gold-shimmer mb-6 text-center">
-            Daily Wellness Rituals
+            {t.health.ritualsTitle}
           </h3>
           
           <div className="grid md:grid-cols-2 gap-4">
-            {remedies.map((remedy, index) => (
+            {t.health.rituals.map((ritual, index) => (
               <motion.div
                 key={index}
                 className="flex items-center gap-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20"
@@ -124,8 +127,8 @@ const HealthSection = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 + index * 0.1 }}
               >
-                <span className="text-2xl">{remedy.icon}</span>
-                <span className="font-elegant text-foreground/80">{remedy.text}</span>
+                <span className="text-2xl">{ritualIcons[index]}</span>
+                <span className="font-elegant text-foreground/80">{ritual}</span>
               </motion.div>
             ))}
           </div>

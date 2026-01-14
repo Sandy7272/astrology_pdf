@@ -1,7 +1,15 @@
 import { motion } from 'framer-motion';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const DashaSection = () => {
+interface DashaSectionProps {
+  language: Language;
+}
+
+const DashaSection = ({ language }: DashaSectionProps) => {
+  const t = getTranslation(language);
+  
   const planets = [
     { name: 'Sun', symbol: '☉', color: 'from-orange-500/30' },
     { name: 'Moon', symbol: '☽', color: 'from-slate-300/30' },
@@ -15,10 +23,14 @@ const DashaSection = () => {
   ];
 
   const dashaTimeline = [
-    { planet: 'Jupiter', period: '2020-2036', status: 'current', nature: 'Expansion & Wisdom' },
-    { planet: 'Saturn', period: '2036-2055', status: 'upcoming', nature: 'Discipline & Legacy' },
-    { planet: 'Mercury', period: '2055-2072', status: 'future', nature: 'Communication & Learning' },
+    { planet: 'Jupiter', period: '2020-2036', status: 'current', nature: t.dasha.natures.expansionWisdom },
+    { planet: 'Saturn', period: '2036-2055', status: 'upcoming', nature: t.dasha.natures.disciplineLegacy },
+    { planet: 'Mercury', period: '2055-2072', status: 'future', nature: t.dasha.natures.communicationLearning },
   ];
+
+  const getPlanetName = (name: string) => {
+    return t.dasha.planets[name as keyof typeof t.dasha.planets] || name;
+  };
 
   return (
     <section className="min-h-screen py-20 px-6 relative">
@@ -32,9 +44,9 @@ const DashaSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Cosmic Timeline
+            {t.dasha.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Planetary Time Cycle</h2>
+          <h2 className="section-title mb-6">{t.dasha.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -99,7 +111,7 @@ const DashaSection = () => {
                   </span>
                   {planet.current && (
                     <span className="absolute -bottom-6 text-xs font-display text-primary whitespace-nowrap">
-                      Current
+                      {t.dasha.current}
                     </span>
                   )}
                 </motion.div>
@@ -115,8 +127,8 @@ const DashaSection = () => {
               transition={{ duration: 3, repeat: Infinity }}
             >
               <div>
-                <p className="font-display text-lg text-gold-shimmer">Mahadasha</p>
-                <p className="text-xs text-muted-foreground">Jupiter</p>
+                <p className="font-display text-lg text-gold-shimmer">{t.dasha.mahadasha}</p>
+                <p className="text-xs text-muted-foreground">{getPlanetName('Jupiter')}</p>
               </div>
             </motion.div>
           </div>
@@ -131,7 +143,7 @@ const DashaSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h3 className="font-display text-xl text-gold-shimmer mb-8 text-center">
-            Your Planetary Periods
+            {t.dasha.periodsTitle}
           </h3>
           
           <div className="space-y-4">
@@ -159,10 +171,10 @@ const DashaSection = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-1">
                     <h4 className={`font-display text-lg ${dasha.status === 'current' ? 'text-gold-shimmer' : 'text-foreground/70'}`}>
-                      {dasha.planet} Mahadasha
+                      {getPlanetName(dasha.planet)} {t.dasha.mahadasha}
                     </h4>
                     {dasha.status === 'current' && (
-                      <span className="badge-premium text-xs">Active</span>
+                      <span className="badge-premium text-xs">{t.dasha.active}</span>
                     )}
                   </div>
                   <p className="text-muted-foreground text-sm">{dasha.period}</p>
