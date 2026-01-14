@@ -400,6 +400,38 @@ export const t = (key: string, lang: Language): string => {
   return typeof value === 'string' ? value : key;
 };
 
-export const getTranslation = <T>(obj: { en: T; hi: T; mr: T }, lang: Language): T => {
+// Helper to get a translation value from a language-keyed object
+export const getTranslationValue = <T>(obj: { en: T; hi: T; mr: T }, lang: Language): T => {
   return obj[lang];
+};
+
+// Helper to get all translations for a language - recursively extracts values
+const extractLangValues = (obj: any, lang: Language): any => {
+  if (obj === null || obj === undefined) return obj;
+  
+  // If it's a translation object with language keys
+  if (typeof obj === 'object' && 'en' in obj && 'hi' in obj && 'mr' in obj && 
+      (typeof obj.en === 'string' || Array.isArray(obj.en))) {
+    return obj[lang];
+  }
+  
+  // If it's an array, map over it
+  if (Array.isArray(obj)) {
+    return obj.map(item => extractLangValues(item, lang));
+  }
+  
+  // If it's an object, recurse
+  if (typeof obj === 'object') {
+    const result: any = {};
+    for (const key in obj) {
+      result[key] = extractLangValues(obj[key], lang);
+    }
+    return result;
+  }
+  
+  return obj;
+};
+
+export const getTranslation = (lang: Language) => {
+  return extractLangValues(translations, lang);
 };

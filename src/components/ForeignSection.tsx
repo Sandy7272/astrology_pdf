@@ -1,20 +1,21 @@
 import { motion } from 'framer-motion';
 import { Plane, Globe, MapPin, Calendar } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const ForeignSection = () => {
+interface ForeignSectionProps {
+  language: Language;
+}
+
+const ForeignSection = ({ language }: ForeignSectionProps) => {
+  const t = getTranslation(language);
+  
   const destinations = [
-    { region: 'North America', probability: 85, years: '2027-2030' },
-    { region: 'Europe', probability: 70, years: '2029-2032' },
-    { region: 'Middle East', probability: 60, years: '2026-2028' },
-    { region: 'Southeast Asia', probability: 45, years: '2025-2027' },
-  ];
-
-  const insights = [
-    'Strong 9th house indicates international travels and foreign connections',
-    'Jupiter\'s aspect suggests academic or professional opportunities abroad',
-    'Rahu placement favors settlement in Western directions',
-    'Most favorable travel periods align with Jupiter and Venus transits',
+    { region: t.foreign.regions.northAmerica, probability: 85, years: '2027-2030' },
+    { region: t.foreign.regions.europe, probability: 70, years: '2029-2032' },
+    { region: t.foreign.regions.middleEast, probability: 60, years: '2026-2028' },
+    { region: t.foreign.regions.southeastAsia, probability: 45, years: '2025-2027' },
   ];
 
   return (
@@ -29,9 +30,9 @@ const ForeignSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Journey Beyond
+            {t.foreign.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Destiny Abroad</h2>
+          <h2 className="section-title mb-6">{t.foreign.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -69,7 +70,7 @@ const ForeignSection = () => {
           </div>
 
           <h3 className="font-display text-xl text-gold-shimmer mb-6 text-center">
-            Foreign Opportunity Map
+            {t.foreign.mapTitle}
           </h3>
 
           {/* Destination Bars */}
@@ -102,7 +103,7 @@ const ForeignSection = () => {
                   />
                 </div>
                 <div className="text-right">
-                  <span className="text-xs text-primary">{dest.probability}% probability</span>
+                  <span className="text-xs text-primary">{dest.probability}% {t.foreign.probability}</span>
                 </div>
               </motion.div>
             ))}
@@ -118,10 +119,10 @@ const ForeignSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h3 className="font-display text-lg text-gold-shimmer mb-4">
-            Planetary Insights
+            {t.foreign.insightsTitle}
           </h3>
           <ul className="space-y-3">
-            {insights.map((insight, index) => (
+            {t.foreign.insights.map((insight, index) => (
               <motion.li
                 key={index}
                 className="flex items-start gap-3 text-foreground/80 font-elegant"

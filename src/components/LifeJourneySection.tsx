@@ -1,56 +1,64 @@
 import { motion } from 'framer-motion';
 import { Baby, GraduationCap, Briefcase, Star, Heart, Trophy } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const LifeJourneySection = () => {
+interface LifeJourneySectionProps {
+  language: Language;
+}
+
+const LifeJourneySection = ({ language }: LifeJourneySectionProps) => {
+  const t = getTranslation(language);
+  
   const timeline = [
     {
-      period: 'Childhood',
-      years: '0-12 years',
+      period: t.lifeJourney.childhood.period,
+      years: t.lifeJourney.childhood.years,
       icon: Baby,
       type: 'foundation',
-      description: 'A sensitive soul navigating a world of wonder. Early challenges built resilience that would define your character.',
-      highlight: 'Foundation of Strength',
+      description: t.lifeJourney.childhood.description,
+      highlight: t.lifeJourney.childhood.highlight,
     },
     {
-      period: 'Adolescence',
-      years: '13-21 years',
+      period: t.lifeJourney.adolescence.period,
+      years: t.lifeJourney.adolescence.years,
       icon: GraduationCap,
       type: 'growth',
-      description: 'The awakening of your true potential. Struggles with identity gave way to self-discovery and purpose.',
-      highlight: 'Path of Discovery',
+      description: t.lifeJourney.adolescence.description,
+      highlight: t.lifeJourney.adolescence.highlight,
     },
     {
-      period: 'Early Adulthood',
-      years: '22-32 years',
+      period: t.lifeJourney.earlyAdulthood.period,
+      years: t.lifeJourney.earlyAdulthood.years,
       icon: Briefcase,
       type: 'challenge',
-      description: 'The crucible years. Professional challenges and personal trials forge the hero within.',
-      highlight: 'The Forge',
+      description: t.lifeJourney.earlyAdulthood.description,
+      highlight: t.lifeJourney.earlyAdulthood.highlight,
     },
     {
-      period: 'Prime Years',
-      years: '33-45 years',
+      period: t.lifeJourney.primeYears.period,
+      years: t.lifeJourney.primeYears.years,
       icon: Star,
       type: 'success',
-      description: 'Your golden era approaches. Recognition, achievement, and the fruits of patience manifest.',
-      highlight: 'Rising Glory',
+      description: t.lifeJourney.primeYears.description,
+      highlight: t.lifeJourney.primeYears.highlight,
     },
     {
-      period: 'Fulfillment',
-      years: '46-60 years',
+      period: t.lifeJourney.fulfillment.period,
+      years: t.lifeJourney.fulfillment.years,
       icon: Heart,
       type: 'wisdom',
-      description: 'Wisdom earned through experience. Legacy building and meaningful connections define this chapter.',
-      highlight: 'Harvest Season',
+      description: t.lifeJourney.fulfillment.description,
+      highlight: t.lifeJourney.fulfillment.highlight,
     },
     {
-      period: 'Legacy',
-      years: '60+ years',
+      period: t.lifeJourney.legacy.period,
+      years: t.lifeJourney.legacy.years,
       icon: Trophy,
       type: 'legacy',
-      description: 'The sage emerges. Your journey inspires generations, and your story becomes legend.',
-      highlight: 'Eternal Impact',
+      description: t.lifeJourney.legacy.description,
+      highlight: t.lifeJourney.legacy.highlight,
     },
   ];
 
@@ -78,9 +86,9 @@ const LifeJourneySection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Flashback Scene
+            {t.lifeJourney.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Your Life Journey</h2>
+          <h2 className="section-title mb-6">{t.lifeJourney.title}</h2>
           <GoldDivider />
         </motion.div>
 

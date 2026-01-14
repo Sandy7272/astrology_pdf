@@ -2,14 +2,14 @@ import { motion } from 'framer-motion';
 import { Brain, Heart, Zap, Shield } from 'lucide-react';
 import GoldDivider from './GoldDivider';
 import { Language } from './LanguageSelector';
-import { translations, getTranslation } from '@/lib/translations';
+import { getTranslation } from '@/lib/translations';
 
 interface PersonalitySectionProps {
   language: Language;
 }
 
 const PersonalitySection = ({ language }: PersonalitySectionProps) => {
-  const t = translations.personality;
+  const t = getTranslation(language);
 
   const parseGoldText = (text: string) => {
     const parts = text.split(/<gold>|<\/gold>/);
@@ -19,10 +19,10 @@ const PersonalitySection = ({ language }: PersonalitySectionProps) => {
   };
 
   const traits = [
-    { icon: Brain, ...t.thinkingStyle },
-    { icon: Heart, ...t.emotionalNature },
-    { icon: Zap, ...t.coreStrengths },
-    { icon: Shield, ...t.growthAreas },
+    { icon: Brain, ...t.personality.thinkingStyle },
+    { icon: Heart, ...t.personality.emotionalNature },
+    { icon: Zap, ...t.personality.coreStrengths },
+    { icon: Shield, ...t.personality.growthAreas },
   ];
 
   return (
@@ -36,9 +36,9 @@ const PersonalitySection = ({ language }: PersonalitySectionProps) => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            {getTranslation(t.sceneLabel, language)}
+            {t.personality.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">{getTranslation(t.title, language)}</h2>
+          <h2 className="section-title mb-6">{t.personality.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -56,14 +56,14 @@ const PersonalitySection = ({ language }: PersonalitySectionProps) => {
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 1 }}
           >
-            "{parseGoldText(getTranslation(t.intro, language))}"
+            "{parseGoldText(t.personality.intro)}"
           </motion.p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {traits.map((trait, index) => (
             <motion.div
-              key={getTranslation(trait.title, language)}
+              key={trait.title}
               className="card-cosmic rounded-2xl p-8 relative overflow-hidden group"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -80,14 +80,14 @@ const PersonalitySection = ({ language }: PersonalitySectionProps) => {
                 
                 <div className="flex-1">
                   <h3 className="font-display text-xl text-gold-shimmer mb-3">
-                    {getTranslation(trait.title, language)}
+                    {trait.title}
                   </h3>
                   <p className="font-elegant text-lg text-foreground/80 leading-relaxed mb-4">
-                    {getTranslation(trait.description, language)}
+                    {trait.description}
                   </p>
                   
                   <div className="flex flex-wrap gap-2">
-                    {getTranslation(trait.highlights, language).map((highlight: string) => (
+                    {trait.highlights.map((highlight: string) => (
                       <span
                         key={highlight}
                         className="px-3 py-1 rounded-full text-sm font-body bg-secondary/50 text-primary border border-primary/20"

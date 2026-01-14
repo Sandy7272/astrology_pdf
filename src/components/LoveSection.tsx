@@ -1,30 +1,49 @@
 import { motion } from 'framer-motion';
 import { Heart, Sparkles, Users, CalendarHeart } from 'lucide-react';
 import GoldDivider from './GoldDivider';
+import { Language } from './LanguageSelector';
+import { getTranslation } from '@/lib/translations';
 
-const LoveSection = () => {
+interface LoveSectionProps {
+  language: Language;
+}
+
+const LoveSection = ({ language }: LoveSectionProps) => {
+  const t = getTranslation(language);
+  
   const lovePhases = [
     {
-      phase: 'Meeting',
-      description: 'Your destined encounter comes through unexpected channels—perhaps a professional setting or during travels.',
+      phase: t.love.phases.meeting.phase,
+      description: t.love.phases.meeting.description,
       icon: '✨',
     },
     {
-      phase: 'Courtship',
-      description: 'A slow-burning romance built on intellectual connection and deep conversations.',
+      phase: t.love.phases.courtship.phase,
+      description: t.love.phases.courtship.description,
       icon: '💫',
     },
     {
-      phase: 'Union',
-      description: 'Marriage brings stability and growth. Your partnership becomes a source of strength.',
+      phase: t.love.phases.union.phase,
+      description: t.love.phases.union.description,
       icon: '💍',
     },
     {
-      phase: 'Evolution',
-      description: 'Years 5-10 of marriage bring deepest bonding and shared accomplishments.',
+      phase: t.love.phases.evolution.phase,
+      description: t.love.phases.evolution.description,
       icon: '🌟',
     },
   ];
+
+  // Parse main reading to handle <gold> tags
+  const parseMainReading = (text: string) => {
+    const parts = text.split(/<gold>|<\/gold>/);
+    return parts.map((part, index) => {
+      if (index % 2 === 1) {
+        return <span key={index} className="text-gold-shimmer font-semibold">{part}</span>;
+      }
+      return part;
+    });
+  };
 
   return (
     <section className="min-h-screen py-20 px-6 relative overflow-hidden">
@@ -41,9 +60,9 @@ const LoveSection = () => {
           transition={{ duration: 0.8 }}
         >
           <span className="font-body text-primary text-sm tracking-[0.3em] uppercase mb-4 block">
-            Romantic Scene
+            {t.love.sceneLabel}
           </span>
-          <h2 className="section-title mb-6">Love & Destiny</h2>
+          <h2 className="section-title mb-6">{t.love.title}</h2>
           <GoldDivider />
         </motion.div>
 
@@ -86,18 +105,16 @@ const LoveSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 1 }}
           >
-            "Venus whispers of a <span className="text-gold-shimmer font-semibold">profound love</span> written in your stars. 
-            Your partner will be someone of <span className="text-gold-shimmer font-semibold">intellectual depth</span> and 
-            emotional maturity, drawn to your authentic spirit..."
+            "{parseMainReading(t.love.mainReading)}"
           </motion.p>
         </motion.div>
 
         {/* Love Details Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {[
-            { icon: Heart, title: 'Love Type', value: 'Love Marriage', subtitle: 'Strong romantic connection indicated' },
-            { icon: CalendarHeart, title: 'Marriage Window', value: '2026-2028', subtitle: 'Most auspicious period' },
-            { icon: Users, title: 'Partner Nature', value: 'Intellectual & Caring', subtitle: 'Complementary energies' },
+            { icon: Heart, ...t.love.loveType },
+            { icon: CalendarHeart, ...t.love.marriageWindow },
+            { icon: Users, ...t.love.partnerNature },
           ].map((item, index) => (
             <motion.div
               key={item.title}
@@ -127,7 +144,7 @@ const LoveSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h3 className="font-display text-xl text-gold-shimmer mb-8 text-center">
-            Your Love Story Phases
+            {t.love.phasesTitle}
           </h3>
           
           <div className="grid md:grid-cols-4 gap-4">
