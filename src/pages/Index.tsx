@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import StarField from '@/components/StarField';
 import ZodiacBackground from '@/components/ZodiacBackground';
 import CoverPage from '@/components/CoverPage';
+import DoshaAnalysis from '@/components/DoshaAnalysis';
 import PersonalitySection from '@/components/PersonalitySection';
 import LifeJourneySection from '@/components/LifeJourneySection';
 import CareerSection from '@/components/CareerSection';
@@ -139,6 +140,7 @@ const Index = () => {
                     chartData={astrologyData.charts.d1}
                     panchang={astrologyData.panchang}
                   />
+                  <DoshaAnalysis doshas={astrologyData.doshas} language={language} />
                   <PersonalitySection language={language} />
                   <LifeJourneySection language={language} />
                   <CareerSection language={language} />
